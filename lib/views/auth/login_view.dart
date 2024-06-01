@@ -1,19 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/user/navbar_bawah.dart';
-import 'package:flutter_application_1/views/user/homepage.dart';
-import 'package:flutter_application_1/views/user/register.dart';
+import 'package:flutter_application_1/controllers/auth_controller.dart';
+import 'package:flutter_application_1/views/auth/register_view.dart';
 
 class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+  Login({Key? key}) : super(key: key);
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // Login method
+  void login(BuildContext context) async {
+    final authService = AuthController();
+
+    // Validasi email dan password tidak boleh kosong
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email dan password tidak boleh kosong')),
+      );
+      return;
+    }
+
+    try {
+      await authService.signInWithEmailAndPassword(
+          context, _emailController.text, _passwordController.text);
+    } catch (e) {
+      // Handle errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3D8C5),
+      backgroundColor: const Color(0xFFFFF0E5),
       body: Stack(
         children: <Widget>[
+          // Background images
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/lingkaran1.png'),
                 fit: BoxFit.scaleDown,
@@ -22,16 +48,17 @@ class Login extends StatelessWidget {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/lingkaran2.png'),
                 fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
+                alignment: FractionalOffset(1.0, 0.2),
+                scale: 1.5,
               ),
             ),
           ),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/bawah.png'),
                 fit: BoxFit.fitWidth,
@@ -40,28 +67,32 @@ class Login extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                // Title
                 Container(
-                  padding: EdgeInsets.only(top: 90),
-                  child: Text(
-                    'LOGIN',
+                  padding: const EdgeInsets.only(top: 90),
+                  child: const Text(
+                    'Login',
                     style: TextStyle(
-                      color: Color(0xFFFF5146),
+                      color: Color(0xFFF88A65),
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(height: 180),
+                const SizedBox(height: 180),
+                // Email field
                 TextField(
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    hintText: 'Username',
-                    hintStyle: TextStyle(color: Colors.grey),
+                  controller: _emailController,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Poppins'),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
@@ -70,12 +101,14 @@ class Login extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
+                // Password field
                 TextField(
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
+                  controller: _passwordController,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: const InputDecoration(
                     hintText: 'Password',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Poppins'),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
@@ -85,15 +118,17 @@ class Login extends StatelessWidget {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
+                // Register button
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'tidak punya akun?',
+                      const Text(
+                        'Tidak punya akun?',
                         style: TextStyle(
+                          fontFamily: 'Poppins',
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -102,54 +137,44 @@ class Login extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => register()),
+                            MaterialPageRoute(builder: (context) => Register()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           elevation: 0,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Daftar',
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFFE87C5F),
+                            color: Color(0xFFF88A65),
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
+                // Login button
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) =>
-                            NavbarBawah(),
-                        transitionsBuilder:
-                            (context, animation1, animation2, child) {
-                          return FadeTransition(
-                            opacity: animation1,
-                            child: child,
-                          );
-                        },
-                        transitionDuration: Duration(milliseconds: 2500),
-                      ),
-                    );
-                  },
+                  onPressed: () => login(context),
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                    backgroundColor: Color(0xFFFF5146),
+                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 23),
+                    backgroundColor: const Color(0xFFF8A083),
                   ),
-                  child: Text(
-                    'login',
-                    style: TextStyle(color: Colors.white),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/user/formaduan.dart';
-import 'package:flutter_application_1/views/user/homepage.dart';
+import 'package:flutter_application_1/views/user/homepage_view.dart';
 import 'package:flutter_application_1/views/user/listpesan.dart';
 
 class NavbarBawah extends StatefulWidget {
@@ -14,7 +14,7 @@ class _NavbarBawah extends State<NavbarBawah> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Homepage(),
+    HomepageUser(),
     FormAduan(),
     ListPesan()
   ];

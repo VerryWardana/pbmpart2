@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/views/user/formaduan.dart';
 
-class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+class HomepageUser extends StatelessWidget {
+  const HomepageUser({super.key});
 
   @override
   Widget build(BuildContext context) {
