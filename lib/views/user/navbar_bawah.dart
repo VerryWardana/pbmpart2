@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/user/formaduan.dart';
+import 'package:flutter_application_1/views/user/artikel_view.dart';
 import 'package:flutter_application_1/views/user/homepage_view.dart';
 import 'package:flutter_application_1/views/user/listpesan.dart';
 
@@ -15,8 +15,8 @@ class _NavbarBawah extends State<NavbarBawah> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     HomepageUser(),
-    FormAduan(),
-    ListPesan()
+    ArtikelView(),
+    ListpesanView()
   ];
 
   void _onItemTapped(int index) {
@@ -39,8 +39,8 @@ class _NavbarBawah extends State<NavbarBawah> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.description_rounded),
-            label: 'Laporan',
+            icon: Icon(Icons.article_rounded),
+            label: 'Artikel',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded),

@@ -1,21 +1,27 @@
+// formaduan_view.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/user/navbar_bawah.dart';
-import 'package:flutter_application_1/views/user/homepage_view.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'navbar_bawah.dart';
+import 'package:flutter_application_1/controllers/aduan_controller.dart';
+import 'package:flutter_application_1/models/aduan.dart';
 
-class FormAduan extends StatefulWidget {
-  const FormAduan({super.key});
+class FormaduanView extends StatefulWidget {
+  const FormaduanView({super.key});
 
   @override
-  _FormAduanState createState() => _FormAduanState();
+  _FormaduanViewState createState() => _FormaduanViewState();
 }
 
-class _FormAduanState extends State<FormAduan> {
+class _FormaduanViewState extends State<FormaduanView> {
   final _formKey = GlobalKey<FormState>();
+  final _controller = AduanController();
   String? _jenisPelecehan;
   DateTime? _selectedDate;
   final _locationController = TextEditingController();
   final _chronologyController = TextEditingController();
+  File? _imageFile;
 
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -28,6 +34,34 @@ class _FormAduanState extends State<FormAduan> {
       setState(() {
         _selectedDate = picked;
       });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final aduan = Aduan(
+        jenisPelecehan: _jenisPelecehan!,
+        tanggalKejadian: _selectedDate!,
+        lokasi: _locationController.text,
+        kronologi: _chronologyController.text,
+      );
+
+      await _controller.addAduan(aduan, _imageFile);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NavbarBawah()),
+      );
     }
   }
 
@@ -231,16 +265,21 @@ class _FormAduanState extends State<FormAduan> {
               const SizedBox(height: 10),
               Row(
                 children: [
-                  const Icon(
-                    Icons.image,
-                    size: 50,
-                    color: Colors.grey,
-                  ),
+                  _imageFile == null
+                      ? const Icon(
+                          Icons.image,
+                          size: 50,
+                          color: Colors.grey,
+                        )
+                      : Image.file(
+                          _imageFile!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
                   const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      // Implementasikan fungsi unggah gambar di sini
-                    },
+                    onPressed: _pickImage,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF8A083), // F8A083
                       textStyle: const TextStyle(
@@ -263,9 +302,7 @@ class _FormAduanState extends State<FormAduan> {
                   width: 358,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Implementasikan fungsi selesai di sini
-                    },
+                    onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF8A083), // F8A083
                       textStyle: const TextStyle(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/user/navbar_bawah.dart';
 
-class ListPesan extends StatefulWidget {
-  const ListPesan({super.key});
+class ListpesanView extends StatefulWidget {
+  const ListpesanView({super.key});
 
   @override
-  State<ListPesan> createState() => _ListPesanState();
+  State<ListpesanView> createState() => _ListpesanViewState();
 }
 
-class _ListPesanState extends State<ListPesan> {
+class _ListpesanViewState extends State<ListpesanView> {
   // Dummy data for demonstration purposes
   final List<Map<String, dynamic>> messages = [
     {
