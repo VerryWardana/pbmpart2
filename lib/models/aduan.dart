@@ -1,7 +1,9 @@
+// models/aduan.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Aduan {
   String? id;
+  String username;
   String jenisPelecehan;
   DateTime tanggalKejadian;
   String lokasi;
@@ -10,6 +12,7 @@ class Aduan {
 
   Aduan({
     this.id,
+    required this.username,
     required this.jenisPelecehan,
     required this.tanggalKejadian,
     required this.lokasi,
@@ -19,6 +22,7 @@ class Aduan {
 
   Map<String, dynamic> toMap() {
     return {
+      'username': username,
       'jenispelecehan': jenisPelecehan,
       'tanggalkejadian': tanggalKejadian,
       'lokasi': lokasi,
@@ -31,19 +35,12 @@ class Aduan {
     final data = doc.data() as Map<String, dynamic>;
     return Aduan(
       id: doc.id,
-      jenisPelecehan: data['jenisPelecehan'],
+      username: data['username'],
+      jenisPelecehan: data['jenispelecehan'],
       tanggalKejadian: (data['tanggalkejadian'] as Timestamp).toDate(),
       lokasi: data['lokasi'],
       kronologi: data['kronologi'],
       imageUrl: data['imageUrl'],
     );
   }
-
-  // factory Aduan.fromDocument(DocumentSnapshot doc) {
-  //   return Aduan(
-  //     id: doc.id,
-  //     tanggal: (doc['tanggal'] as Timestamp).toDate(),
-  //     jenisPelecehan: doc['jenispelecehan'],
-  //   );
-  // }
 }

@@ -25,7 +25,7 @@ class AuthController {
       // Arahkan pengguna ke halaman yang sesuai berdasarkan perannya
       switch (role) {
         case 'user':
-          Navigator.pushReplacementNamed(context, '/navbarbawah');
+          Navigator.pushReplacementNamed(context, '/homepageuser');
           break;
         case 'admin':
           Navigator.pushReplacementNamed(context, '/homepageadmin');

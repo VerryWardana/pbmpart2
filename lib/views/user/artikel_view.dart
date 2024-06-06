@@ -92,7 +92,7 @@ class _ArtikelViewState extends State<ArtikelView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    artikel.title,
+                                    artikel.judul,
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

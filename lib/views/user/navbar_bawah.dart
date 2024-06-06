@@ -14,7 +14,7 @@ class _NavbarBawah extends State<NavbarBawah> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HomepageUser(),
+    HomepageuserView(),
     ArtikelView(),
     ListpesanView()
   ];

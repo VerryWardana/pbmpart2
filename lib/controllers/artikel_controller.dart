@@ -15,7 +15,7 @@ class ArtikelController {
       _artikels.add(Artikel(
         id: doc.id,  // Use doc.id to get the document ID
         imageUrl: doc['imageUrl'],
-        title: doc['judul'],
+        judul: doc['judul'],
       ));
     }
   }

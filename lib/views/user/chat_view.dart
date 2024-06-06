@@ -1,30 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controllers/auth_controller.dart';
-import 'package:flutter_application_1/controllers/chat_controller.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/models/mentor.dart';
 
-class ChatUser extends StatelessWidget {
-  final String receiverEmail;
-  final String receiverID;
+class ChatView extends StatefulWidget {
+  final Mentor mentor;
 
-  ChatUser({
-    super.key,
-    required this.receiverEmail,
-    required this.receiverID,
-  });
+  const ChatView({Key? key, required this.mentor}) : super(key: key);
 
-  // text controller
-  final TextEditingController _messageController = TextEditingController();
+  @override
+  _ChatViewState createState() => _ChatViewState();
+}
 
-  // chat & auth controller
-  final ChatController _chatController = ChatController();
-  final AuthController _authController = AuthController();
+class _ChatViewState extends State<ChatView> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeUser();
+  }
 
-  // send message
-  void sendMessage() async {
-    if (_messageController.text.isNotEmpty) {
-      await _chatController.sendMessage(receiverID, _messageController.text);
-      _messageController.clear();
+  Future<void> _initializeUser() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      await FirebaseAuth.instance.signInAnonymously();
     }
   }
 
@@ -32,68 +30,36 @@ class ChatUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(receiverEmail),
+        title: Text('Chat dengan ${widget.mentor.nama}'),
       ),
-      body: Column(
-        children: [
-          // messages list
-          Expanded(child: _buildMessagesList()),
-
-          // user input
-        ],
+      body: FutureBuilder(
+        future: FirebaseChatCore.instance.createRoom(userIds: [widget.mentor.email]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final room = snapshot.data;
+            return Chat(
+              messages: FirebaseChatCore.instance.messages(room!.id),
+              onSendPressed: (partialText) {
+                final message = types.TextMessage(
+                  authorId: FirebaseAuth.instance.currentUser!.uid,
+                  createdAt: DateTime.now().millisecondsSinceEpoch,
+                  id: '',
+                  roomId: room.id,
+                  text: partialText.text,
+                );
+                FirebaseChatCore.instance.sendMessage(message, room.id);
+              },
+              user: types.User(
+                id: FirebaseAuth.instance.currentUser!.uid,
+              ),
+            );
+          }
+        },
       ),
-    );
-  }
-
-  // build messages list
-  Widget _buildMessagesList() {
-    String senderID = _authController.getCurrentUser!.uid;
-    return StreamBuilder(
-      stream: _chatController.getMessages(
-        receiverID,
-        senderID,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text('Loading...');
-        }
-
-        return ListView(
-          children:
-              snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
-        );
-      },
-    );
-  }
-
-  // build message item
-  Widget _buildMessageItem(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-    return Text(data['message']);
-  }
-
-  // build user input
-  Widget _buildUserInput() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _messageController,
-            decoration: InputDecoration(
-              hintText: 'Type a message...',
-            ),
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.send),
-          onPressed: sendMessage,
-        ),
-      ],
     );
   }
 }

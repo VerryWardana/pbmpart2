@@ -6,6 +6,8 @@ import 'dart:io';
 import 'navbar_bawah.dart';
 import 'package:flutter_application_1/controllers/aduan_controller.dart';
 import 'package:flutter_application_1/models/aduan.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FormaduanView extends StatefulWidget {
   const FormaduanView({super.key});
@@ -22,6 +24,27 @@ class _FormaduanViewState extends State<FormaduanView> {
   final _locationController = TextEditingController();
   final _chronologyController = TextEditingController();
   File? _imageFile;
+  String? _username;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentUser();
+  }
+
+  Future<void> _fetchCurrentUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      setState(() {
+        _username = userDoc['username'] ?? 'User';
+      });
+    }
+  }
 
   Future<void> _pickDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -50,6 +73,7 @@ class _FormaduanViewState extends State<FormaduanView> {
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final aduan = Aduan(
+        username: _username ?? 'User',
         jenisPelecehan: _jenisPelecehan!,
         tanggalKejadian: _selectedDate!,
         lokasi: _locationController.text,

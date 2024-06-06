@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Login(),
-        '/navbarbawah': (context) => FormaduanView(),
+        '/homepageuser': (context) => NavbarBawah(),
         '/homepageadmin': (context) => HomepageAdmin(),
         '/homepagementor': (context) => HomepageMentor(),
         '/register': (context) => Register(),

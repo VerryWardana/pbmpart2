@@ -1,7 +1,7 @@
-// lib/controllers/homepage_controller.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_application_1/models/aduan.dart';
+import 'package:flutter_application_1/models/mentor.dart';
 
 class HomepageuserController {
   late String username;
@@ -22,17 +22,22 @@ class HomepageuserController {
     List<Aduan> aduanList = [];
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance.collection('aduan').get();
+          await FirebaseFirestore.instance
+              .collection('aduan')
+              .where('username', isEqualTo: username)
+              .get();
 
       for (var doc in querySnapshot.docs) {
-        Timestamp timestamp =
-            doc['tanggalkejadian']; // Assuming the timestamp field is named 'tanggal'
+        Timestamp timestamp = doc['tanggalkejadian'];
         DateTime dateTime = timestamp.toDate();
         Aduan aduan = Aduan(
-          id: doc.id, // Assuming the document ID is used as the id
-          jenisPelecehan:
-              doc['jenisPelecehan'], // Extracting jenisPelecehan field
-          tanggalKejadian: dateTime, lokasi: doc['lokasi'], kronologi: doc['kronologi'], imageUrl: doc['imageUrl'],
+          id: doc.id,
+          username: doc['username'],
+          jenisPelecehan: doc['jenispelecehan'],
+          tanggalKejadian: dateTime,
+          lokasi: doc['lokasi'],
+          kronologi: doc['kronologi'],
+          imageUrl: doc['imageUrl'],
         );
         aduanList.add(aduan);
       }
@@ -40,5 +45,30 @@ class HomepageuserController {
       print("Error fetching aduan: $e");
     }
     return aduanList;
+  }
+
+  Future<List<Mentor>> fetchMentors() async {
+    List<Mentor> mentorList = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('mentor')
+              .get();
+
+      for (var doc in querySnapshot.docs) {
+        Mentor mentor = Mentor(
+          id: doc.id,
+          nama: doc['nama'],
+          fotoUrl: doc['fotoUrl'],
+          email: doc['email'],
+          asal: doc['asal'],
+          deskripsi: doc['deskripsi'],
+        );
+        mentorList.add(mentor);
+      }
+    } catch (e) {
+      print("Error fetching mentors: $e");
+    }
+    return mentorList;
   }
 }
