@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application_1/controllers/chat_controller.dart';
 import 'package:flutter_application_1/models/mentor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatView extends StatefulWidget {
   final Mentor mentor;
@@ -14,51 +14,67 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  @override
-  void initState() {
-    super.initState();
-    _initializeUser();
-  }
-
-  Future<void> _initializeUser() async {
-    if (FirebaseAuth.instance.currentUser == null) {
-      await FirebaseAuth.instance.signInAnonymously();
-    }
-  }
+  final ChatController _chatController = ChatController();
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat dengan ${widget.mentor.nama}'),
+        title: Text('Chat with ${widget.mentor.nama}'),
       ),
-      body: FutureBuilder(
-        future: FirebaseChatCore.instance.createRoom(userIds: [widget.mentor.email]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final room = snapshot.data;
-            return Chat(
-              messages: FirebaseChatCore.instance.messages(room!.id),
-              onSendPressed: (partialText) {
-                final message = types.TextMessage(
-                  authorId: FirebaseAuth.instance.currentUser!.uid,
-                  createdAt: DateTime.now().millisecondsSinceEpoch,
-                  id: '',
-                  roomId: room.id,
-                  text: partialText.text,
-                );
-                FirebaseChatCore.instance.sendMessage(message, room.id);
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _chatController.getChatMessages(widget.mentor.email),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
+                  return ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      var message = messages[index];
+                      return ListTile(
+                        title: Text(message['message']),
+                        subtitle: Text('Sent by: ${message['senderUid']}'),
+                      );
+                    },
+                  );
+                }
               },
-              user: types.User(
-                id: FirebaseAuth.instance.currentUser!.uid,
-              ),
-            );
-          }
-        },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    decoration: InputDecoration(
+                      hintText: 'Type your message...',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: () {
+                    if (_messageController.text.isNotEmpty) {
+                      _chatController.sendMessage(
+                          widget.mentor.email, 'currentUserId', _messageController.text);
+                      _messageController.clear();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

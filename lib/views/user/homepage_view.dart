@@ -5,6 +5,8 @@ import 'package:flutter_application_1/models/aduan.dart';
 import 'package:flutter_application_1/models/mentor.dart';
 import 'package:flutter_application_1/views/user/aduan_view.dart';
 import 'package:flutter_application_1/views/user/artikel_view.dart';
+import 'package:flutter_application_1/views/user/chat_view.dart';
+import 'package:flutter_application_1/controllers/chat_controller.dart';
 
 class HomepageuserView extends StatefulWidget {
   const HomepageuserView({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class HomepageuserView extends StatefulWidget {
 
 class _HomepageuserViewState extends State<HomepageuserView> {
   final HomepageuserController _controller = HomepageuserController();
+  final ChatController _chatController = ChatController(); // Tambahkan ini
   List<Aduan> aduanList = [];
   List<Mentor> mentorList = [];
 
@@ -427,7 +430,7 @@ class _HomepageuserViewState extends State<HomepageuserView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ChatPage(mentor: mentor)),
+                              builder: (context) => ChatView(mentor: mentor)),
                         );
                       },
                       icon: const Icon(Icons.chat, color: Colors.white),

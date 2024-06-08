@@ -1,60 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_application_1/models/pesan.dart';
 
 class ChatController {
-  // import firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // get user
-  Stream<List<Map<String, dynamic>>> getUsersStream() {
-    return _firestore.collection('Users').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final user = doc.data();
+  // Membuat ruang obrolan antara pengguna (user) dan mentor
+  Future<String> createChatRoom(String userUid, String mentorEmail) async {
+    String roomId = 'chat_$userUid$mentorEmail';
+    await _firestore.collection('chat_room').doc(roomId).set({
+      'userUid': userUid,
+      'mentorEmail': mentorEmail,
+      'createdAt': DateTime.now(),
+    });
+    return roomId;
+  }
 
-        return user;
-      }).toList();
+  // Mengirim pesan ke ruang obrolan
+  Future<void> sendMessage(
+      String roomId, String senderUid, String message) async {
+    await _firestore
+        .collection('chat_room')
+        .doc(roomId)
+        .collection('messages')
+        .add({
+      'senderUid': senderUid,
+      'message': message,
+      'createdAt': DateTime.now(),
     });
   }
 
-  // send message
-  Future<void> sendMessage(String receiverID, message) async {
-    // get current user
-    final String currentUserID = _auth.currentUser!.uid;
-    final String currentUserEmail = _auth.currentUser!.email!;
-    final Timestamp timestamp = Timestamp.now();
-
-    // create message
-    Pesan newMessage = Pesan(
-      senderID: currentUserEmail,
-      senderEmail: currentUserID,
-      receiverID: receiverID,
-      message: message,
-      timestamp: timestamp,
-    );
-
-    List<String> ids = [currentUserID, receiverID];
-    ids.sort();
-    String chatRoomID = ids.join('_');
-
-    // add new message to firestore
-    await _firestore
-        .collection('chat_rooms')
-        .doc(chatRoomID)
+  // Mendapatkan daftar pesan dari ruang obrolan
+  Stream<QuerySnapshot> getChatMessages(String roomId) {
+    return _firestore
+        .collection('chat_room')
+        .doc(roomId)
         .collection('messages')
-        .add(newMessage.toMap());
+        .orderBy('createdAt')
+        .snapshots();
   }
 
-  // get messages
-  Stream <QuerySnapshot> getMessages(String userID, otherUserID) {
-    List<String> ids = [userID, otherUserID];
-    ids.sort();
-    String chatRoomID = ids.join('_');
-
+  // Mendapatkan daftar ruang obrolan pengguna
+  Stream<List<String>> getUserChatRooms(String mentorEmail) {
     return _firestore
-        .collection('chat_rooms')
-        .doc(chatRoomID)
-        .collection('messages')
-        .orderBy('timestamp', descending: false)
-        .snapshots();
+        .collection('chat_room')
+        .where('mentorEmail', isEqualTo: mentorEmail)
+        .snapshots()
+        .map((querySnapshot) =>
+            querySnapshot.docs.map((doc) => doc.id).toList());
   }
 }
