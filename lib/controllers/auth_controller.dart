@@ -69,6 +69,9 @@ class AuthController {
         'email': email,
         'username': username, // Simpan username dalam firestore
         'role': 'user',
+        'imageUrl': '', // URL gambar profil pengguna
+        'umur': '', // Umur pengguna
+        'jeniskelamin': '', // Jenis kelamin pengguna
       });
 
       return userCredential.user;

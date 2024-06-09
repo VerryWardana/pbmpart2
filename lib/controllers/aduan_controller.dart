@@ -9,20 +9,15 @@ class AduanController {
 
   Future<void> addAduan(Aduan aduan, File? imageFile) async {
     String? imageUrl;
-    String? username;
+    String? email; // Mengganti username dengan email
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .get();
-
-      username = userDoc['username'] ?? 'User';
+      email = user.email; // Menggunakan email dari user saat ini
     }
 
-    if (imageFile != null && username != null) {
-      final fileName = '${username}_${aduan.jenisPelecehan}_${DateTime.now()}.png';
+    if (imageFile != null && email != null) { // Menggunakan email saat ini
+      final fileName = '${email}_${aduan.jenisPelecehan}_${DateTime.now()}.png';
       final storageRef = FirebaseStorage.instance.ref().child('aduan/$fileName');
       await storageRef.putFile(imageFile);
       imageUrl = await storageRef.getDownloadURL();
@@ -32,3 +27,4 @@ class AduanController {
     await aduanCollection.add(aduan.toMap());
   }
 }
+

@@ -4,7 +4,9 @@ import 'package:flutter_application_1/models/aduan.dart';
 import 'package:flutter_application_1/models/mentor.dart';
 
 class HomepageuserController {
+  late String email;
   late String username;
+  late String imageUrl;
 
   Future<void> getCurrentUser() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -14,7 +16,9 @@ class HomepageuserController {
           .doc(user.uid)
           .get();
 
-      username = userDoc['username'] ?? 'User';
+      email = user.email ?? userDoc['email'];
+      username = userDoc['username'];
+      imageUrl = userDoc['imageUrl'];
     }
   }
 
@@ -24,7 +28,7 @@ class HomepageuserController {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await FirebaseFirestore.instance
               .collection('aduan')
-              .where('username', isEqualTo: username)
+              .where('email', isEqualTo: email)
               .get();
 
       for (var doc in querySnapshot.docs) {
@@ -32,7 +36,7 @@ class HomepageuserController {
         DateTime dateTime = timestamp.toDate();
         Aduan aduan = Aduan(
           id: doc.id,
-          username: doc['username'],
+          email: doc['email'],
           jenisPelecehan: doc['jenispelecehan'],
           tanggalKejadian: dateTime,
           lokasi: doc['lokasi'],

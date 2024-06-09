@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/homepageadmin': (context) => HomepageAdmin(),
         '/homepagementor': (context) => HomepageMentor(),
         '/register': (context) => Register(),
+        '/logout': (context) => Login(),
       },
     );
   }

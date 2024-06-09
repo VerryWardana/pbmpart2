@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Aduan {
   String? id;
-  String username;
+  String email;
   String jenisPelecehan;
   DateTime tanggalKejadian;
   String lokasi;
@@ -12,7 +12,7 @@ class Aduan {
 
   Aduan({
     this.id,
-    required this.username,
+    required this.email,
     required this.jenisPelecehan,
     required this.tanggalKejadian,
     required this.lokasi,
@@ -22,7 +22,7 @@ class Aduan {
 
   Map<String, dynamic> toMap() {
     return {
-      'username': username,
+      'email': email,
       'jenispelecehan': jenisPelecehan,
       'tanggalkejadian': tanggalKejadian,
       'lokasi': lokasi,
@@ -35,7 +35,7 @@ class Aduan {
     final data = doc.data() as Map<String, dynamic>;
     return Aduan(
       id: doc.id,
-      username: data['username'],
+      email: data['email'],
       jenisPelecehan: data['jenispelecehan'],
       tanggalKejadian: (data['tanggalkejadian'] as Timestamp).toDate(),
       lokasi: data['lokasi'],

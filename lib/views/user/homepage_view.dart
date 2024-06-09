@@ -7,6 +7,7 @@ import 'package:flutter_application_1/views/user/aduan_view.dart';
 import 'package:flutter_application_1/views/user/artikel_view.dart';
 import 'package:flutter_application_1/views/user/chat_view.dart';
 import 'package:flutter_application_1/controllers/chat_controller.dart';
+import 'package:flutter_application_1/views/user/profil_view.dart';
 
 class HomepageuserView extends StatefulWidget {
   const HomepageuserView({Key? key}) : super(key: key);
@@ -71,9 +72,22 @@ class _HomepageuserViewState extends State<HomepageuserView> {
                       ),
                     ],
                   ),
-                  const CircleAvatar(
-                    radius: 25,
-                    backgroundImage: AssetImage('assets/images/saya.JPG'),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfilUser(),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: _controller.imageUrl.isNotEmpty
+                        ? NetworkImage(_controller.imageUrl)
+                        : const AssetImage('assets/images/Profile.png')
+                            as ImageProvider,
+                    ),
                   ),
                 ],
               ),
