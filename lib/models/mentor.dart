@@ -21,6 +21,9 @@ class Mentor {
     return {
       'nama': nama,
       'fotoUrl': fotoUrl,
+      'email': email,
+      'asal': asal,
+      'deskripsi': deskripsi,
     };
   }
 

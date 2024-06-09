@@ -4,7 +4,7 @@ import 'package:flutter_application_1/models/mentor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class Mentorcontroller {
+class MentorController {
   final CollectionReference mentorsCollection =
       FirebaseFirestore.instance.collection('mentor');
 
@@ -24,7 +24,9 @@ class Mentorcontroller {
       'email': email,
     });
   }
-
+  Future<void> deleteMentor(String id) async {
+    await mentorsCollection.doc(id).delete();
+  }
   Future<File?> pickImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {

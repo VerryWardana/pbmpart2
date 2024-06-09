@@ -9,8 +9,7 @@ class TambahmentorView extends StatefulWidget {
 }
 
 class _TambahmentorViewState extends State<TambahmentorView> {
-  final Mentorcontroller mentorController = Mentorcontroller();
-
+  final MentorController mentorController = MentorController();
   final TextEditingController namaController = TextEditingController();
   final TextEditingController asalController = TextEditingController();
   final TextEditingController deskripsiController = TextEditingController();
@@ -24,6 +23,50 @@ class _TambahmentorViewState extends State<TambahmentorView> {
       setState(() {
         _image = pickedImage;
       });
+    }
+  }
+
+  Future<void> _submitForm() async {
+    if (namaController.text.isNotEmpty &&
+        asalController.text.isNotEmpty &&
+        deskripsiController.text.isNotEmpty &&
+        emailController.text.isNotEmpty &&
+        _image != null) {
+      fotoUrl = await mentorController.uploadImage(
+          _image!, '${namaController.text}.png');
+      await mentorController.tambahMentor(
+        namaController.text,
+        asalController.text,
+        deskripsiController.text,
+        fotoUrl ?? '',
+        emailController.text,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const NavbarAdmin()),
+      );
+    } else {
+      // Handle the case where required fields are not filled
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Gagal'),
+            content: const Text('Mohon isi semua data'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NavbarAdmin()),
+                  );
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -131,49 +174,7 @@ class _TambahmentorViewState extends State<TambahmentorView> {
                   width: 358,
                   height: 48,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      if (namaController.text.isNotEmpty &&
-                          asalController.text.isNotEmpty &&
-                          deskripsiController.text.isNotEmpty &&
-                          emailController.text.isNotEmpty &&
-                          _image != null) {
-                        fotoUrl = await mentorController.uploadImage(
-                            _image!, '${namaController.text}.png');
-                        await mentorController.tambahMentor(
-                          namaController.text,
-                          asalController.text,
-                          deskripsiController.text,
-                          fotoUrl ?? '', // Use empty string if fotoUrl is null
-                          emailController.text,
-                        );
-                        Navigator.of(context)
-                            .pop(); // Navigate back after adding
-                      } else {
-                        // Handle the case where required fields are not filled
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Gagal'),
-                              content: const Text('Mohon isi semua data'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const NavbarAdmin()),
-                                    );
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
+                    onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF8A083),
                       textStyle: const TextStyle(

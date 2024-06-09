@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/admin/HomePageAdmin.dart';
+import 'package:flutter_application_1/views/admin/listmentor.dart';
 import 'package:flutter_application_1/views/admin/tambahmentor_view.dart';
 import 'package:flutter_application_1/views/user/aduan_view.dart';
 
@@ -17,7 +18,7 @@ class _NavbarAdmin extends State<NavbarAdmin> {
   static List<Widget> _widgetOptions = <Widget>[
     HomepageAdmin(),
     TambahmentorView(),
-    FormaduanView()
+    ListMentor()
   ];
 
   void _onItemTapped(int index) {
