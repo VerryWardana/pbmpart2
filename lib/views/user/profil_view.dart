@@ -3,14 +3,14 @@ import 'package:flutter_application_1/controllers/profil_controller.dart';
 import 'package:flutter_application_1/models/user.dart' as model_user;
 import 'package:flutter_application_1/views/user/navbar_bawah.dart';
 
-class ProfilUser extends StatefulWidget {
-  const ProfilUser({Key? key}) : super(key: key);
+class ProfilView extends StatefulWidget {
+  const ProfilView({Key? key}) : super(key: key);
 
   @override
-  _ProfilUserState createState() => _ProfilUserState();
+  _ProfilViewState createState() => _ProfilViewState();
 }
 
-class _ProfilUserState extends State<ProfilUser> {
+class _ProfilViewState extends State<ProfilView> {
   final ProfilController _profilController = ProfilController();
   model_user.User? _user; // Variabel _user diubah menjadi nullable
   late TextEditingController _usernameController;

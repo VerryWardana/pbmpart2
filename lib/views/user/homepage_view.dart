@@ -77,7 +77,7 @@ class _HomepageuserViewState extends State<HomepageuserView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProfilUser(),
+                          builder: (context) => const ProfilView(),
                         ),
                       );
                     },

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/views/user/artikel_view.dart';
-import 'package:flutter_application_1/views/user/homepage_view.dart';
-import 'package:flutter_application_1/views/user/listpesan.dart';
+import 'package:flutter_application_1/views/admin/HomePageAdmin.dart';
+import 'package:flutter_application_1/views/admin/tambahmentor_view.dart';
+import 'package:flutter_application_1/views/user/aduan_view.dart';
 
-class NavbarBawah extends StatefulWidget {
-  const NavbarBawah({Key? key}) : super(key: key);
+
+class NavbarAdmin extends StatefulWidget {
+  const NavbarAdmin({Key? key}) : super(key: key);
 
   @override
-  State<NavbarBawah> createState() => _NavbarBawah();
+  State<NavbarAdmin> createState() => _NavbarAdmin();
 }
 
-class _NavbarBawah extends State<NavbarBawah> {
+class _NavbarAdmin extends State<NavbarAdmin> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomepageuserView(),
-    ArtikelView(),
-    ListpesanView()
+  static List<Widget> _widgetOptions = <Widget>[
+    HomepageAdmin(),
+    TambahmentorView(),
+    FormaduanView()
   ];
 
   void _onItemTapped(int index) {
@@ -40,7 +41,7 @@ class _NavbarBawah extends State<NavbarBawah> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.article_rounded),
-            label: 'Artikel',
+            label: 'Mentor',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded),

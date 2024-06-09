@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/admin/HomePageAdmin.dart';
+import 'package:flutter_application_1/views/admin/navbar_admin.dart';
 import 'package:flutter_application_1/views/mentor/homepage.dart';
 import 'package:flutter_application_1/views/user/aduan_view.dart';
 import 'package:flutter_application_1/views/user/homepage_view.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Login(),
         '/homepageuser': (context) => NavbarBawah(),
-        '/homepageadmin': (context) => HomepageAdmin(),
+        '/homepageadmin': (context) => NavbarAdmin(),
         '/homepagementor': (context) => HomepageMentor(),
         '/register': (context) => Register(),
         '/logout': (context) => Login(),
