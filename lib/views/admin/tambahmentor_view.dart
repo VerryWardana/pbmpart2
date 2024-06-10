@@ -92,6 +92,7 @@ class _TambahmentorViewState extends State<TambahmentorView> {
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: Color(0xFFF88A65),
+            
           ),
         ),
       ),

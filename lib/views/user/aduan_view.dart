@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/views/admin/ListLporan.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -77,7 +78,7 @@ class _FormaduanViewState extends State<FormaduanView> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const NavbarBawah()),
+        MaterialPageRoute(builder: (context) => ListAduan()),
       );
     }
   }

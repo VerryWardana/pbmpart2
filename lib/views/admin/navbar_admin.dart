@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/admin/HomePageAdmin.dart';
+import 'package:flutter_application_1/views/admin/ListLporan.dart';
 import 'package:flutter_application_1/views/admin/listmentor.dart';
 import 'package:flutter_application_1/views/admin/tambahmentor_view.dart';
 import 'package:flutter_application_1/views/user/aduan_view.dart';
@@ -18,7 +19,8 @@ class _NavbarAdmin extends State<NavbarAdmin> {
   static List<Widget> _widgetOptions = <Widget>[
     HomepageAdmin(),
     TambahmentorView(),
-    ListMentor()
+    ListMentor(),
+    ListAduan(),
   ];
 
   void _onItemTapped(int index) {
@@ -44,10 +46,14 @@ class _NavbarAdmin extends State<NavbarAdmin> {
             icon: Icon(Icons.article_rounded),
             label: 'Mentor',
           ),
+    BottomNavigationBarItem(
+            icon: Icon(Icons.person_rounded),
+            label: 'User',
+          ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_rounded),
-            label: 'Chat'
-          )
+            icon: Icon(Icons.assignment_rounded),
+            label: 'ListLaporan',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

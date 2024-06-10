@@ -26,5 +26,14 @@ class AduanController {
     aduan.imageUrl = imageUrl;
     await aduanCollection.add(aduan.toMap());
   }
+  Future<List<Aduan>> getAduanList() async {
+    QuerySnapshot querySnapshot = await aduanCollection.get();
+    return querySnapshot.docs.map((doc) {
+      return Aduan.fromMap(doc.data() as DocumentSnapshot<Object?>);
+    }).toList();
+  }
+
+  getAllAduan() {}
 }
+
 

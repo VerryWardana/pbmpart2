@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/views/admin/listmentor.dart';
+import 'package:flutter_application_1/views/admin/tambahmentor_view.dart';
 
 class HomepageAdmin extends StatelessWidget {
   const HomepageAdmin({super.key});
@@ -72,7 +74,13 @@ class HomepageAdmin extends StatelessWidget {
                   top: 30,
                   right: 50,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TambahmentorView()),
+                      );
+                    },
                     child: Container(
                       width: 50.0,
                       height: 50.0,
@@ -94,75 +102,63 @@ class HomepageAdmin extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'Butuh Teman Curhat',
+                'List Mentor',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage('assets/images/saya.JPG'),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Dr.Verry',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
+            SizedBox(height: 10),
+            Align(
+            alignment: Alignment.center,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ListMentor()),
+                );
+              },
+              child: Container(
+                width: 380,
+                height: 53,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xFFE87C5F),
+                  ),
                 ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage('assets/images/saya.JPG'),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'fasjfhbajfhjfna',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        size: 35,
+                        color: Color(0xFFE87C5F),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        'nasigoreng',
+                        style: TextStyle(
+                          color: Color(0xFFE87C5F),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Spacer(), // This will push the icon to the far right
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Color(0xFFE87C5F),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage('assets/images/saya.JPG'),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Nama 3',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage('assets/images/saya.JPG'),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'Nama 4',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
-              ],
+              ),
             ),
-            SizedBox(height: 20),          
+          ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(

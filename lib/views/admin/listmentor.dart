@@ -86,9 +86,14 @@ void _showDeleteConfirmationDialog(BuildContext context, String id) {
         title: const Center(
           child: Text(
             'List Mentor',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFF88A65),
           ),
         ),
+      ),
       ),
       body: FutureBuilder<List<Mentor>>(
         future: _mentorsFuture,
